@@ -21,6 +21,8 @@ jobs:
         with:
           dotnet-version: '6.0.x'
           dotnet-quality: 'preview'
+      - name: Show where is triggered from
+        run: echo $DESTINATION
         
       - name: Build
         run: dotnet build
