@@ -25,6 +25,8 @@ jobs:
         run: |
           echo $DESTINATION
           ls -la
+          echo Test
+          echo $GITHUB_OUTPUT
         
       - name: Build
         run: dotnet build
