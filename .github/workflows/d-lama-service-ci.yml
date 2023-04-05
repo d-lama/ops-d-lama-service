@@ -35,11 +35,11 @@ jobs:
           ls -la
           echo Test
           echo $GITHUB_OUTPUT
-          echo $sln-path
-          echo ${{ inputs.sln-path }}
+          echo $sln-path 1
+          echo ${{ inputs.sln-path }} 3
         
       - name: Build
-        run: dotnet build $sln-path
+        run: dotnet build ${{ inputs.sln-path }}
   
   # This workflow contains a single job called "build"
   test:
@@ -57,7 +57,7 @@ jobs:
           dotnet-quality: 'preview'
         
       - name: Test
-        run: dotnet test $sln-path
+        run: dotnet test ${{ inputs.sln-path }}
   sonarcloud:
     runs-on: ubuntu-latest
     steps:
@@ -67,8 +67,6 @@ jobs:
         fetch-depth: 0
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
-      with:
-        sln-path: ${{ secrets.SONAR }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
