@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: d-lama-service
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  strategy:
+    type: 'RollingUpdate'
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 100%
+  selector:
+    matchLabels:
+      logoutfmt: json
+      app.kubernetes.io/component: deployment
+  template:
+    metadata:
+      labels:
+        logoutfmt: json
+        app.kubernetes.io/component: deployment
+    spec:
+      imagePullSecrets:
+        - name: dockerhub-pull-secret
+      containers:
+        - name: d-lama-service
+          image: d-lama-service-image
+          env:
+            - name: DATABASE__USER
+              valueFrom:
+                secretKeyRef:
+                  name: d-lama-service-database-auth
+                  key: username
+            - name: DATABASE__PASS
+              valueFrom:
+                secretKeyRef:
+                  name: d-lama-service-database-auth
+                  key: password
+          envFrom:
+            - configMapRef:
+                name: d-lama-service
+            #- secretRef:
+            #    name: d-lama-service
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: grpc
+              containerPort: 5000
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 100m
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi

@@ -1,0 +1,11 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: d-lama-service
+spec:
+  selector:
+    matchLabels:
+      app: d-lama-service
+      app/component: d-lama
+  endpoints:
+    - port: http

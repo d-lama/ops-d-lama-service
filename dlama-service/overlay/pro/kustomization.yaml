@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: dlama-prod
+
+commonLabels:
+  env: pro
+
+resources:
+- ../../base
+- ../../base/pgpool2
+- config.yaml
+
+replicas:
+- count: 1
+  name: d-lama-service
+
+patchesStrategicMerge:
+- imageversion.yaml
+- patches/service-monitor.yaml
+
+images:
+- digest: sha256:0000000000000000000000000000000000000000000000000000000000000000
+  name: d-lama-service-image
+  newName: feuerdave/d-lama-service
