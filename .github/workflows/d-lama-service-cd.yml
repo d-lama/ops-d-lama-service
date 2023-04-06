@@ -1,4 +1,4 @@
-name: d-lama-service-ci
+name: d-lama-service-cd
 
 # Controls when the workflow will run
 on:
