@@ -14,7 +14,7 @@ on:
         required: true
       NPM_TOKEN:
         required: true
-      GITHUB_TOKEN:
+      PA_TOKEN:
         required: true
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -83,5 +83,5 @@ jobs:
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v3
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PA_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
