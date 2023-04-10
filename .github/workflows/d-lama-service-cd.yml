@@ -51,12 +51,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: sta
     steps:
-      - name: Apply sta
-        uses: actions-hub/kubectl@master
-        env:
-          KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
-        with:
-          args:  apply -k ops/dlama-service/overlay/sta
       - name: Kustomize build
         uses: actions/checkout@master
         with:
@@ -81,7 +75,12 @@ jobs:
           kustomize build ops/dlama-service/overlay/sta
           kubectl --help
           kubectl -n d-lama-stage get pods
-          
+      - name: Apply sta
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
+        with:
+          args:  apply -k ops/dlama-service/overlay/sta
         
           
           
