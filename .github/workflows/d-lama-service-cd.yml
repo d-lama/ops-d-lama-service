@@ -10,6 +10,8 @@ on:
         required: true
       PP_DLAMA_TOKEN:
         required: true
+      KUBECONFIG:
+        required: true
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -41,6 +43,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
   deploy_sta:
+  
     needs:
       - push_to_registry
     
@@ -48,7 +51,14 @@ jobs:
     runs-on: ubuntu-latest
     environment: sta
     steps:
-      - uses: actions/checkout@master
+      - name: Apply sta
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
+        with:
+          args: get pods
+      - name: Kustomize build
+        uses: actions/checkout@master
         with:
           name: d-lama/ops-d-lama-service
           token: ${{ secrets.PP_DLAMA_TOKEN }}
@@ -68,4 +78,10 @@ jobs:
           echo "${{ needs.push_to_registry.docker-build.outputs.digest }}"
           echo "${{ needs.push_to_registry.meta.outputs.tags }}"
           kustomize --help
-          kustomize ops/d-lama-service/overlay/sta
+          kustomize build ops/d-lama-service/overlay/sta
+          kubectl --help
+          kubectl -n d-lama-stage get pods
+          
+        
+          
+          
