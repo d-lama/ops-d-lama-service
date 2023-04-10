@@ -31,9 +31,22 @@ jobs:
           images: feuerdave/d-lama-service
           
       - name: Build and push Docker image
+        id: docker-build
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+  deploy_env:
+    needs:
+      - push_to_registry
+    name: Deploy to environment
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          DIGEST: ${{needs.push_to_registry.outputs.digest}}
+        run: |
+          echo "$DIGEST "
+          echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
+          echo "Tag name from github.ref_name: ${{  github.ref_name }}"
