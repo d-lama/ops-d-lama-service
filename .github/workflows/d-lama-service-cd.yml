@@ -44,9 +44,17 @@ jobs:
     name: Deploy to environment
     runs-on: ubuntu-latest
     steps:
+      - uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.TOKEN }}
+          approvers: yingrjimsch
       - env:
           DIGEST: ${{needs.push_to_registry.outputs.digest}}
         run: |
           echo "$DIGEST "
           echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
           echo "Tag name from github.ref_name: ${{  github.ref_name }}"
+          echo "${{needs.push_to_registry.outputs.digest}}"
+          echo "${{needs.push_to_registry.outputs.tags}}"
+          echo "${{needs.push_to_registry.docker-build.outputs.digest}}"
+          echo "${{needs.push_to_registry.meta.outputs.tags}}"
