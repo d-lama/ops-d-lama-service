@@ -75,7 +75,6 @@ jobs:
           kustomize --help
           kustomize build ops/dlama-service/overlay/sta
           kubectl --help
-          kubectl -n d-lama-stage get pods
       - name: Apply sta
         uses: actions-hub/kubectl@master
         env:
