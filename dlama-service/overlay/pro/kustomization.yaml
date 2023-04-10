@@ -8,7 +8,6 @@ commonLabels:
 
 resources:
 - ../../base
-- ../../base/pgpool2
 - config.yaml
 
 replicas:
