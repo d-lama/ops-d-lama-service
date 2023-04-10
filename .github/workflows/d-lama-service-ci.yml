@@ -76,6 +76,8 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         
   semantic-release:
+    needs:
+      - test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
