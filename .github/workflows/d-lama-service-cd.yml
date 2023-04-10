@@ -40,11 +40,11 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-  deploy_env:
+  deploy_sta:
     needs:
       - push_to_registry
     
-    name: Deploy to environment
+    name: Deploy to stage
     runs-on: ubuntu-latest
     environment: sta
     steps:
@@ -68,4 +68,4 @@ jobs:
           echo "${{ needs.push_to_registry.docker-build.outputs.digest }}"
           echo "${{ needs.push_to_registry.meta.outputs.tags }}"
           kustomize --help
-          kustomize d-lama-service/overlay/sta
+          kustomize ops/d-lama-service/overlay/sta
