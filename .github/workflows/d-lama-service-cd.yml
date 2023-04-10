@@ -58,6 +58,8 @@ jobs:
           DIGEST: ${{needs.push_to_registry.outputs.digest}}
         run: |
           ls -la
+          cd ops
+          ls -la
           echo "$DIGEST "
           echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
           echo "Tag name from github.ref_name: ${{  github.ref_name }}"
