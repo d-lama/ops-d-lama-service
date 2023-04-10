@@ -43,11 +43,8 @@ jobs:
       - push_to_registry
     name: Deploy to environment
     runs-on: ubuntu-latest
+    environment: sta
     steps:
-      - uses: trstringer/manual-approval@v1
-        with:
-          secret: ${{ github.TOKEN }}
-          approvers: yingrjimsch
       - env:
           DIGEST: ${{needs.push_to_registry.outputs.digest}}
         run: |
