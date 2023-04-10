@@ -41,17 +41,24 @@ jobs:
   deploy_env:
     needs:
       - push_to_registry
+    
     name: Deploy to environment
     runs-on: ubuntu-latest
     environment: sta
     steps:
+      - uses: actions/checkout@master
+        with:
+          name: d-lama/ops-d-lama-service
       - env:
           DIGEST: ${{needs.push_to_registry.outputs.digest}}
         run: |
+          ls -la
           echo "$DIGEST "
           echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
           echo "Tag name from github.ref_name: ${{  github.ref_name }}"
-          echo "${{needs.push_to_registry.outputs.digest}}"
-          echo "${{needs.push_to_registry.outputs.tags}}"
-          echo "${{needs.push_to_registry.docker-build.outputs.digest}}"
-          echo "${{needs.push_to_registry.meta.outputs.tags}}"
+          echo "${{ needs.push_to_registry.outputs.digest }}"
+          echo "${{ needs.push_to_registry.outputs.tags }}"
+          echo "${{ needs.push_to_registry.docker-build.outputs.digest }}"
+          echo "${{ needs.push_to_registry.meta.outputs.tags }}"
+          kustomize --help
+          kustomize d-lama-service/overlay/sta
