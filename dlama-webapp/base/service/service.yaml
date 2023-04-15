@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: d-lama-webapp-service
+spec:
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 4343
+      name: https
+  selector:
+    app.kubernetes.io/component: deployment

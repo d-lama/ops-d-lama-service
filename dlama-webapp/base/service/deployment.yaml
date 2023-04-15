@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: d-lama-webapp-deployment
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  strategy:
+    type: 'RollingUpdate'
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 100%
+  selector:
+    matchLabels:
+      logoutfmt: json
+      app.kubernetes.io/component: deployment
+  template:
+    metadata:
+      labels:
+        logoutfmt: json
+        app.kubernetes.io/component: deployment
+    spec:
+      imagePullSecrets:
+        - name: dockerhub-pull-secret
+      containers:
+        - name: d-lama-webapp
+          image: d-lama-webapp-image
+          envFrom:
+            - configMapRef:
+                name: d-lama-webapp
+            #- secretRef:
+            #    name: d-lama-webapp
+          ports:
+            - name: https
+              containerPort: 4343
+              protocol: TCP
+              resources: {}
+          livenessProbe:
+            httpsGet:
+              path: /health
+              port: https
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+          readinessProbe:
+            httpsGet:
+              path: /health
+              port: https
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 100m
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi
