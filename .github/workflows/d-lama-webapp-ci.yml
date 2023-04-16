@@ -5,41 +5,98 @@ name: d-lama-webapp-ci
 # Controls when the workflow will run
 on:
   workflow_call:
+    inputs:
+      sln-path:
+        required: true
+        type: string
+    secrets:
+      SONAR_TOKEN:
+        required: true
+      NPM_TOKEN:
+        required: true
+      PP_DLAMA_TOKEN:
+        required: true
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+  # This workflow contains a single job called "install"
+  install:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout Repo
-        uses: actions/checkout@v3  
-        
+        uses: actions/checkout@v3    
       - name: Set up Node.js  
         uses: actions/setup-node@v3
         with:
+          sln-path: ${{ inputs.sln-path }}
           node-version: '18.x'
-        
-      - name: Install Dependencies
-        run: npm install
-        
-      - name: Run Tests
-        run: npm run test
-
-      - name: Build
-        run: npm run build
-        
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Show where is triggered from
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
-          
+          echo $DESTINATION
+          ls -la
+          echo Test
+          echo $GITHUB_OUTPUT
+          echo $sln-path 1
+          echo ${{ inputs.sln-path }} 3   
+      - name: Install Dependencies
+        run: npm install ${{ inputs.sln-path }}
+
+  test:
+    needs:
+      - install  
+    runs-on: ubuntu-latest
+     steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Set up Node.js  
+        uses: actions/setup-node@v3
+        with:
+          sln-path: ${{ inputs.sln-path }}
+          node-version: '18.x'
+      - name: Run Tests
+        run: npm run test ${{ inputs.sln-path }}
+
+  build:
+    needs:
+      - test    
+    runs-on: ubuntu-latest
+     steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Set up Node.js  
+        uses: actions/setup-node@v3
+        with:
+          sln-path: ${{ inputs.sln-path }}
+          node-version: '18.x'
+      - name: Build
+        run: npm run build ${{ inputs.sln-path }}
+
+  sonarcloud:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        # Disabling shallow clone is recommended for improving relevancy of reporting
+        fetch-depth: 0
+    - name: SonarCloud Scan
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.PP_DLAMA_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        
+  semantic-release:
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.PP_DLAMA_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        
