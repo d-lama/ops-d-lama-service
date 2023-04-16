@@ -9,6 +9,7 @@ commonLabels:
 resources:
 - ../../base
 - config.yaml
+- ingress.yaml
 
 replicas:
 - count: 1

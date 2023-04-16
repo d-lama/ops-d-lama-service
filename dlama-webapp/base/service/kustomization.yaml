@@ -5,6 +5,7 @@ resources:
   - deployment.yaml
   - service-monitor.yaml
   - service.yaml
+  - ingress.yaml
 
 commonLabels:
   app: d-lama-webapp

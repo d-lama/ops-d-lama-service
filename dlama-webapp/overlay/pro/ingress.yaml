@@ -6,7 +6,7 @@ metadata:
 #    ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   rules:
-  - host: labeling.dlama-stag.init-lab.ch
+  - host: labeling.dlama-prod.init-lab.ch
     http:
       paths:
       - pathType: Prefix
@@ -16,3 +16,4 @@ spec:
             name: d-lama-webapp-service
             port:
               number: 443
+              

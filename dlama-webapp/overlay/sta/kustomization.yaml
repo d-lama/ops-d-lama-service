@@ -5,25 +5,18 @@ namespace: dlama-stage
 commonLabels:
   env: sta
 
+resources:
+- ../../base
+- config.yaml
+- ingress.yaml
+
 replicas:
 - count: 1
   name: d-lama-webapp
 
-resources:
-- ../../base
-- config.yaml
-
 patchesStrategicMerge:
 - imageversion.yaml
 - patches/service-monitor.yaml
-
-patches:
-- path: patches/postgres.yaml
-  target:
-    group: kubedb.com
-    kind: Postgres
-    name: d-lama-wepapp-database
-    version: v1alpha2
     
 images:
 - digest: sha256:0000000000000000000000000000000000000000000000000000000000000000

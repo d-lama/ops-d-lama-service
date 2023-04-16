@@ -6,4 +6,4 @@ spec:
   template:
     metadata:
         labels:
-          app.abraxas.ch/version: v1.0.0
+          app.kubernetes.io/version: v1.0.0

@@ -1,9 +1,0 @@
-- op: replace
-  path: /spec/standbyMode
-  value: Hot
-- op: replace
-  path: /spec/monitor/prometheus/serviceMonitor/labels
-  value:
-    monitoring/app: dlama-stage
-- op: remove
-  path: /spec/authSecret
