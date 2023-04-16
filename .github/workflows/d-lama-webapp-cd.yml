@@ -1,4 +1,4 @@
-name: d-lama-service-cd
+name: d-lama-webapp-cd
 
 # Controls when the workflow will run
 on:
