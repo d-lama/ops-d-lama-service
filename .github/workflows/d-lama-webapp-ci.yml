@@ -5,10 +5,6 @@ name: d-lama-webapp-ci
 # Controls when the workflow will run
 on:
   workflow_call:
-    inputs:
-      sln-path:
-        required: true
-        type: string
     secrets:
       SONAR_TOKEN:
         required: true
@@ -31,7 +27,6 @@ jobs:
       - name: Set up Node.js  
         uses: actions/setup-node@v3
         with:
-          sln-path: ${{ inputs.sln-path }}
           node-version: '18.x'
       - name: Show where is triggered from
         run: |
@@ -39,10 +34,8 @@ jobs:
           ls -la
           echo Test
           echo $GITHUB_OUTPUT
-          echo $sln-path 1
-          echo ${{ inputs.sln-path }} 3   
       - name: Install Dependencies
-        run: npm install ${{ inputs.sln-path }}
+        run: npm install
 
   test:
     needs:
@@ -54,10 +47,9 @@ jobs:
       - name: Set up Node.js  
         uses: actions/setup-node@v3
         with:
-          sln-path: ${{ inputs.sln-path }}
           node-version: '18.x'
       - name: Run Tests
-        run: npm run test ${{ inputs.sln-path }}
+        run: npm run test
 
   build:
     needs:
@@ -69,10 +61,9 @@ jobs:
       - name: Set up Node.js  
         uses: actions/setup-node@v3
         with:
-          sln-path: ${{ inputs.sln-path }}
           node-version: '18.x'
       - name: Build
-        run: npm run build ${{ inputs.sln-path }}
+        run: npm run build
 
   sonarcloud:
     runs-on: ubuntu-latest
