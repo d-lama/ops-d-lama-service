@@ -37,23 +37,9 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-  test:
-    needs:
-      - install  
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v3
-      - name: Set up Node.js  
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18.x'
-      - name: Run Tests
-        run: npm run test
-
   build:
     needs:
-      - test    
+      - install    
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -65,7 +51,23 @@ jobs:
       - name: Build
         run: npm run build
 
+  test:
+    needs:
+      - build  
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Set up Node.js  
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      - name: Run Tests
+        run: npm run test
+
   sonarcloud:
+    needs:
+      - test
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -80,7 +82,7 @@ jobs:
         
   semantic-release:
     needs:
-      - build
+      - sonarcloud
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
