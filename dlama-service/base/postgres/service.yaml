@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: d-lama-service-database
+  name: d-lama-service-database-mssql
 spec:
   ports:
     - port: 3306
   selector:
-    app: d-lama-service-database
+    app: d-lama-service-database-mssql
   type: ClusterIP
