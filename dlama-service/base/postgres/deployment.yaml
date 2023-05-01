@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: d-lama-service-database
+  name: d-lama-service-database-mssql
 spec:
   selector:
     matchLabels:
-      app: d-lama-service-database
+      app: d-lama-service-database-mssql
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: d-lama-service-database
+        app: d-lama-service-database-mssql
     spec:
       containers:
-      - image: mysql:5.6
-        name: d-lama-service-database
+      - image: mcr.microsoft.com/mssql/server:2019-latest
+        name: d-lama-service-database-mssql
         resources:
           limits:
             cpu: "1"
@@ -24,18 +24,19 @@ spec:
             cpu: "0.5"
             memory: 1Gi
         env:
-        - name: MYSQL_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mysql-password
-              key: password
+        - name: MSSQL_PID
+          value: "Developer"
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: SA_PASSWORD
+          value: "<YourStrong@Passw0rd>"
         ports:
         - containerPort: 3306
-          name: mysql
+          name: mssql
         volumeMounts:
-        - name: mysql-persistent-storage
-          mountPath: /var/lib/mysql
+        - name: mssqldb
+          mountPath: /var/opt/mssql
       volumes:
-      - name: mysql-persistent-storage
+      - name: mssqldb
         persistentVolumeClaim:
-          claimName: mysql-pv-claim
+          claimName: mssql-data
