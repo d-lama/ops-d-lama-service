@@ -2,24 +2,20 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: d-lama-service-database
-  labels:
-    app: d-lama-service-database
 spec:
   selector:
     matchLabels:
       app: d-lama-service-database
-      tier: mysql
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
         app: d-lama-service-database
-        tier: mysql
     spec:
       containers:
       - image: mysql:5.6
-        name: mysql-container
+        name: d-lama-service-database
         resources:
           limits:
             cpu: "1"
@@ -35,7 +31,7 @@ spec:
               key: password
         ports:
         - containerPort: 3306
-          name: mysql
+          name: d-lama-service-database
         volumeMounts:
         - name: mysql-persistent-storage
           mountPath: /var/lib/mysql
