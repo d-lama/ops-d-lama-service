@@ -1,80 +1,41 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mssql-deployment
+  name: d-lama-service-database
 spec:
-  replicas: 1
   selector:
-     matchLabels:
-       app: mssql
+    matchLabels:
+      app: d-lama-service-database
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
-        app: mssql
+        app: d-lama-service-database
     spec:
-      terminationGracePeriodSeconds: 30
-      hostname: mssqlinst
-      securityContext:
-        fsGroup: 10001
       containers:
-      - name: mssql
-        image: mcr.microsoft.com/mssql/server:2019-latest
+      - image: mysql:5.6
+        name: d-lama-service-database
         resources:
-          requests:
-            memory: "2G"
-            cpu: "2000m"
           limits:
-            memory: "2G"
-            cpu: "2000m"
-        ports:
-        - containerPort: 1433
+            cpu: "1"
+            memory: 1Gi
+          requests:
+            cpu: "0.5"
+            memory: 1Gi
         env:
-        - name: MSSQL_PID
-          value: "Developer"
-        - name: ACCEPT_EULA
-          value: "Y"
-        - name: MSSQL_SA_PASSWORD
+        - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mssql-secret
-              key: SA_PASSWORD
+              name: mysql-password
+              key: password
+        ports:
+        - containerPort: 3306
+          name: mysql
         volumeMounts:
-        - name: mssqldb
-          mountPath: /var/opt/mssql
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
       volumes:
-      - name: mssqldb
+      - name: mysql-persistent-storage
         persistentVolumeClaim:
-          claimName: mssql-data
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mssql-deployment
-spec:
-  selector:
-    app: mssql
-  ports:
-    - protocol: TCP
-      port: 1433
-      targetPort: 1433
-  type: ClusterIP
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mssql-data
-spec:
-  storageClassName: "cinder-csi-ssd"
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 8Gi
----
-apiVersion: v1
-data:
-  SA_PASSWORD: U3FsMjAxOWlzZmFzdA==
-kind: Secret
-metadata:
-  creationTimestamp: null
-  name: mssql-secret
+          claimName: mysql-pv-claim

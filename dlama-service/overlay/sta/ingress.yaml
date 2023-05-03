@@ -2,6 +2,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: sta-d-lama-service-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS"
+    ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   rules:
   - host: backend.dlama-stage.pm4.init-lab.ch
@@ -14,3 +18,4 @@ spec:
             name: d-lama-service
             port:
               number: 80
+              

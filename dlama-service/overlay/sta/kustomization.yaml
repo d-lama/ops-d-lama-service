@@ -17,7 +17,7 @@ resources:
 patchesStrategicMerge:
 - imageversion.yaml
 - patches/service-monitor.yaml
-
+    
 images:
 - name: d-lama-service-image
   newName: feuerdave/d-lama-service
