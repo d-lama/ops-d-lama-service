@@ -1,31 +1,16 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-namespace: dlama-stage
-
-commonLabels:
-  env: sta
-
-replicas:
-- count: 1
-  name: d-lama-service
-
-resources:
-- ../../base
-- config.yaml
-
-patchesStrategicMerge:
-- imageversion.yaml
-- patches/service-monitor.yaml
-
-patches:
-- path: patches/postgres.yaml
-  target:
-    group: kubedb.com
-    kind: Postgres
-    name: d-lama-service-database
-    version: v1alpha2
-    
-images:
-- digest: sha256:0000000000000000000000000000000000000000000000000000000000000000
-  name: d-lama-service-image
-  newName: feuerdave/d-lama-service
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sta-d-lama-service-ingress
+spec:
+  rules:
+  - host: backend.dlama-stage.pm4.init-lab.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: d-lama-service
+            port:
+              number: 80
