@@ -1,38 +1,43 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: d-lama-service-database-mssql
+  name: mssql-deployment
 spec:
+  replicas: 1
   selector:
-    matchLabels:
-      app: d-lama-service-database-mssql
-  strategy:
-    type: Recreate
+     matchLabels:
+       app: mssql
   template:
     metadata:
       labels:
-        app: d-lama-service-database-mssql
+        app: mssql
     spec:
+      terminationGracePeriodSeconds: 30
+      hostname: mssqlinst
+      securityContext:
+        fsGroup: 10001
       containers:
-      - image: mcr.microsoft.com/mssql/server:2019-latest
-        name: d-lama-service-database-mssql
+      - name: mssql
+        image: mcr.microsoft.com/mssql/server:2019-latest
         resources:
-          limits:
-            cpu: "1"
-            memory: 1Gi
           requests:
-            cpu: "0.5"
-            memory: 1Gi
+            memory: "2G"
+            cpu: "2000m"
+          limits:
+            memory: "2G"
+            cpu: "2000m"
+        ports:
+        - containerPort: 1433
         env:
         - name: MSSQL_PID
           value: "Developer"
         - name: ACCEPT_EULA
           value: "Y"
-        - name: SA_PASSWORD
-          value: "<YourStrong@Passw0rd>"
-        ports:
-        - containerPort: 3306
-          name: mssql
+        - name: MSSQL_SA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mssql-secret
+              key: SA_PASSWORD
         volumeMounts:
         - name: mssqldb
           mountPath: /var/opt/mssql
@@ -40,3 +45,36 @@ spec:
       - name: mssqldb
         persistentVolumeClaim:
           claimName: mssql-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mssql-deployment
+spec:
+  selector:
+    app: mssql
+  ports:
+    - protocol: TCP
+      port: 1433
+      targetPort: 1433
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mssql-data
+spec:
+  storageClassName: "cinder-csi-ssd"
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+---
+apiVersion: v1
+data:
+  SA_PASSWORD: U3FsMjAxOWlzZmFzdA==
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: mssql-secret
