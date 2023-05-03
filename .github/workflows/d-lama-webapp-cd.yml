@@ -52,9 +52,8 @@ jobs:
     environment: sta
     steps:
       - name: Kustomize build
-        uses: actions/checkout@master
+        uses: actions/checkout@v3
         with:
-          name: d-lama/ops-d-lama-webapp
           token: ${{ secrets.PP_DLAMA_TOKEN }}
           repository: d-lama/ops-d-lama-webapp
           path: ops
