@@ -5,20 +5,20 @@ namespace: dlama-stage
 commonLabels:
   env: sta
 
+replicas:
+- count: 1
+  name: d-lama-webapp
+
 resources:
 - ../../base
 - config.yaml
 - ingress.yaml
-
-replicas:
-- count: 1
-  name: d-lama-webapp
 
 patchesStrategicMerge:
 - imageversion.yaml
 - patches/service-monitor.yaml
     
 images:
-- digest: sha256:0000000000000000000000000000000000000000000000000000000000000000
-  name: d-lama-webapp-image
-  newName: feuerdave/d-lama-webapp
+-  name: d-lama-webapp-image
+   newName: feuerdave/d-lama-webapp
+   newTag: latest
