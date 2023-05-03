@@ -4,11 +4,9 @@ metadata:
   name: d-lama-service
 spec:
   ports:
-    - port: 8080
+    - port: 80
       targetPort: http
       name: http
-    - port: 5000
-      targetPort: grpc
-      name: grpc
+  type: ClusterIP
   selector:
     app.kubernetes.io/component: deployment
