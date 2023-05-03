@@ -2,11 +2,9 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: sta-d-lama-service-ingress
-#  annotations:
-#    ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   rules:
-  - host: db.dlama-stage.init-lab.ch
+  - host: backend.dlama-stage.pm4.init-lab.ch
     http:
       paths:
       - pathType: Prefix
