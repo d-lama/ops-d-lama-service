@@ -26,7 +26,7 @@ jobs:
         run: |
           ls -la
           cat D-lama-service/d-lama-service/appsettings.json
-          sed -i 's@DB-CONNECTION-STRING@'"$DB_CONNECTION_STRING"'@' D-lama-service/d-lama-serviceappsettings.json
+          sed -i 's@DB-CONNECTION-STRING@'"$DB_CONNECTION_STRING"'@' D-lama-service/d-lama-service/appsettings.json
           cat D-lama-service/d-lama-service/appsettings.json
       
       - name: Log in to Docker Hub
