@@ -12,7 +12,7 @@ on:
         required: true
       KUBECONFIG:
         required: true
-      DB-CONNECTION-STRING:
+      DB_CONNECTION_STRING:
         required: true
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -28,7 +28,7 @@ jobs:
         run: |
           ls -la
           cat D-lama-service/d-lama-service/appsettings.json
-          sed -i 's@DB-CONNECTION-STRING@'"$DB_CONNECTION_STRING"'@' D-lama-service/d-lama-service/appsettings.json
+          sed -i 's@DB-CONNECTION-STRING@'"${{ secrets.DB_CONNECTION_STRING }}"'@' D-lama-service/d-lama-service/appsettings.json
           cat D-lama-service/d-lama-service/appsettings.json
       
       - name: Log in to Docker Hub
