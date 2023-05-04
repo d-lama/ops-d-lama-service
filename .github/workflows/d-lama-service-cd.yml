@@ -26,7 +26,6 @@ jobs:
         
       - name: Change DB Env variables
         run: |
-          ls -la
           cat D-lama-service/d-lama-service/appsettings.json
           sed -i 's@DB-CONNECTION-STRING@'"${{ secrets.DB_CONNECTION_STRING }}"'@' D-lama-service/d-lama-service/appsettings.json
           cat D-lama-service/d-lama-service/appsettings.json
@@ -70,21 +69,8 @@ jobs:
       - env:
           DIGEST: ${{needs.push_to_registry.outputs.digest}}
         run: |
-          ls -la ops
-          ls -la ops/dlama-service
-          ls -la ops/dlama-service/overlay
-          ls -la ops/dlama-service/overlay/sta
-          echo "$DIGEST "
-          echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
-          echo "Tag name from github.ref_name: ${{  github.ref_name }}"
-          echo "${{ needs.push_to_registry.outputs.digest }}"
-          echo "${{ needs.push_to_registry.outputs.tags }}"
-          echo "${{ needs.push_to_registry.docker-build.outputs.digest }}"
-          echo "${{ needs.push_to_registry.meta.outputs.tags }}"
-          kustomize --help
-          kustomize build ops/dlama-service/overlay/sta
-          kubectl --help
           sed -i 's@latest@'"$GITHUB_REF_NAME"'@' ops/dlama-service/overlay/sta/kustomization.yaml
+          cat ops/dlama-service/overlay/sta/kustomization.yaml
       - name: Apply sta
         uses: actions-hub/kubectl@master
         env:
