@@ -1,7 +1,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: d-lama-webapp-service-monitor
+  name: d-lama-webapp
 spec:
   selector:
     matchLabels:

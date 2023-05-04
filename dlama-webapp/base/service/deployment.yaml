@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: d-lama-webapp-deployment
+  name: d-lama-webapp
 spec:
   replicas: 1
   revisionHistoryLimit: 0
@@ -33,20 +33,6 @@ spec:
           ports:
             - name: https
               containerPort: 4343
-              protocol: TCP
-              resources: {}
-          livenessProbe:
-            httpsGet:
-              path: /health
-              port: https
-            initialDelaySeconds: 5
-            timeoutSeconds: 1
-          readinessProbe:
-            httpsGet:
-              path: /health
-              port: https
-            initialDelaySeconds: 5
-            timeoutSeconds: 1
           resources:
             limits:
               cpu: 100m
