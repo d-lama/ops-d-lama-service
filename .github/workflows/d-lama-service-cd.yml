@@ -90,5 +90,5 @@ jobs:
         env:
           KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
         with:
-          args:  apply -k ops/dlama-service/overlay/sta
+          args: -n dlama-stage apply -k ops/dlama-service/overlay/sta
 
