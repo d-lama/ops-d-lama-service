@@ -21,6 +21,13 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
+        
+      - name: Change DB Env variables
+        run: |
+          ls -la
+          cat D-lama-service/d-lama-serviceappsettings.json
+          sed -i 's@DB-CONNECTION-STRING@'"$DB_CONNECTION_STRING"'@' D-lama-service/d-lama-serviceappsettings.json
+          cat D-lama-service/d-lama-serviceappsettings.json
       
       - name: Log in to Docker Hub
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
@@ -75,6 +82,7 @@ jobs:
           kustomize --help
           kustomize build ops/dlama-service/overlay/sta
           kubectl --help
+          sed -i 's@latest@'"$GITHUB_REF_NAME"'@'
       - name: Apply sta
         uses: actions-hub/kubectl@master
         env:
