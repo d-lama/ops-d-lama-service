@@ -15,5 +15,5 @@ spec:
           service:
             name: d-lama-webapp-service
             port:
-              number: 443
+              number: 80
               
