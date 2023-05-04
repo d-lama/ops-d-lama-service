@@ -84,7 +84,7 @@ jobs:
           kustomize --help
           kustomize build ops/dlama-service/overlay/sta
           kubectl --help
-          sed -i 's@latest@'"$GITHUB_REF_NAME"'@'
+          sed -i 's@latest@'"$GITHUB_REF_NAME"'@' ops/dlama-service/overlay/sta/kustomization.yaml
       - name: Apply sta
         uses: actions-hub/kubectl@master
         env:
