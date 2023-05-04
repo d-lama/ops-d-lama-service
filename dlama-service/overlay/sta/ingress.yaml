@@ -8,7 +8,7 @@ metadata:
     ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   rules:
-  - host: backend.dlama-stage.pm4.init-lab.ch
+  - host: backend-dlama-stage.pm4.init-lab.ch
     http:
       paths:
       - pathType: Prefix
