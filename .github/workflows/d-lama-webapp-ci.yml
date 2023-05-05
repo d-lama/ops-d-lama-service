@@ -110,7 +110,7 @@ jobs:
         
   semantic-release:
     needs:
-      - sonarcloud
+      - test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
