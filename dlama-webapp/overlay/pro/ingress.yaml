@@ -1,12 +1,12 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: d-lama-webapp-ingress
+  name: prod-d-lama-webapp-ingress
 #  annotations:
 #    ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   rules:
-  - host: labeling.dlama-prod.init-lab.ch
+  - host: labeling-dlama-prod.init-lab.ch
     http:
       paths:
       - pathType: Prefix
