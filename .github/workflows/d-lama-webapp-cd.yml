@@ -54,9 +54,9 @@ jobs:
       - name: Kustomize build
         uses: actions/checkout@master
         with:
-          name: d-lama/ops-d-lama-webapp
+          name: d-lama/ops-d-lama-service
           token: ${{ secrets.PP_DLAMA_TOKEN }}
-          repository: d-lama/ops-d-lama-webapp
+          repository: d-lama/ops-d-lama-service
           path: ops
       - env:
           DIGEST: ${{needs.push_to_registry.outputs.digest}}
