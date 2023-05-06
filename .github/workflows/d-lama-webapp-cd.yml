@@ -54,30 +54,19 @@ jobs:
       - name: Kustomize build
         uses: actions/checkout@v3
         with:
+          name: d-lama/ops-d-lama-webapp
           token: ${{ secrets.PP_DLAMA_TOKEN }}
           repository: d-lama/ops-d-lama-webapp
           path: ops
       - env:
           DIGEST: ${{needs.push_to_registry.outputs.digest}}
         run: |
-          ls -la ops
-          ls -la ops/dlama-webapp
-          ls -la ops/dlama-webapp/overlay
-          ls -la ops/dlama-webapp/overlay/sta
-          echo "$DIGEST "
-          echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
-          echo "Tag name from github.ref_name: ${{  github.ref_name }}"
-          echo "${{ needs.push_to_registry.outputs.digest }}"
-          echo "${{ needs.push_to_registry.outputs.tags }}"
-          echo "${{ needs.push_to_registry.docker-build.outputs.digest }}"
-          echo "${{ needs.push_to_registry.meta.outputs.tags }}"
-          kustomize --help
-          kustomize build ops/dlama-webapp/overlay/sta
-          kubectl --help
+          sed -i 's@latest@'"$GITHUB_REF_NAME"'@' ops/dlama-webapp/overlay/sta/kustomization.yaml
+          cat ops/dlama-webapp/overlay/sta/kustomization.yaml
       - name: Apply sta
         uses: actions-hub/kubectl@master
         env:
           KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
         with:
-          args:  apply -k ops/dlama-webapp/overlay/sta
+          args: -n dlama-stage apply -k ops/dlama-webapp/overlay/sta
           
