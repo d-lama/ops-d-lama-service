@@ -13,7 +13,7 @@ spec:
         path: "/"
         backend:
           service:
-            name: d-lama-webapp-service
+            name: d-lama-webapp
             port:
               number: 80
               
