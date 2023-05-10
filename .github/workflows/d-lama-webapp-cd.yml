@@ -62,6 +62,12 @@ jobs:
         run: |
           sed -i 's@latest@'"$GITHUB_REF_NAME"'@' ops/dlama-webapp/overlay/sta/kustomization.yaml
           cat ops/dlama-webapp/overlay/sta/kustomization.yaml
+      - name: Delete existing deployment
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
+        with:
+          args: -n dlama-stage delete deployment d-lama-webapp      
       - name: Apply sta
         uses: actions-hub/kubectl@master
         env:
