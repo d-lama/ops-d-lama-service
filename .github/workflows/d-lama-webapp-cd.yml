@@ -10,7 +10,7 @@ on:
         required: true
       PP_DLAMA_TOKEN:
         required: true
-      KUBE_CONFIG:
+      KUBECONFIG:
         required: true
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -65,13 +65,13 @@ jobs:
       - name: Delete existing deployment
         uses: actions-hub/kubectl@master
         env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}
         with:
           args: -n dlama-stage delete deployment d-lama-webapp      
       - name: Apply sta
         uses: actions-hub/kubectl@master
         env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}
         with:
           args: -n dlama-stage apply -k ops/dlama-webapp/overlay/sta
           
