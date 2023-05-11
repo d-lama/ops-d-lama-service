@@ -67,7 +67,7 @@ jobs:
         env:
           KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
         with:
-          args: -n dlama-stage delete deployment d-lama-webapp      
+          args: -n dlama-stage delete deployment d-lama-webapp -v 6     
       - name: Apply sta
         uses: actions-hub/kubectl@master
         env:
