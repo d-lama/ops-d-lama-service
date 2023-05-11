@@ -65,13 +65,13 @@ jobs:
       - name: Delete existing deployment
         uses: actions-hub/kubectl@master
         env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}
+          KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
         with:
           args: -n dlama-stage delete deployment d-lama-webapp      
       - name: Apply sta
         uses: actions-hub/kubectl@master
         env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}
+          KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
         with:
           args: -n dlama-stage apply -k ops/dlama-webapp/overlay/sta
           
