@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sta-d-lama-structurizr-ingress
+#  annotations:
+#    ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - host: structurizr-dlama-stage.pm4.init-lab.ch
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: structurizr-lite
+            port:
+              number: 80
+              

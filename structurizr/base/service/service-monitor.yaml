@@ -1,0 +1,11 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: structurizr-lite
+spec:
+  selector:
+    matchLabels:
+      app: structurizr-lite
+      app/component: structurizr
+  endpoints:
+    - port: https

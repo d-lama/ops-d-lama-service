@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: structurizr-lite
+data:
+  #This part is service specific and has to be filled manually.
+  TEST: 'test'
